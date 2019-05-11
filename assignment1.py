@@ -71,48 +71,53 @@ class Assignment1:
         global UCSClist
         print("Genesymbol: ", UCSClist[0])
                         
-    def get_sam_header(self):
+    def get_sam_header(self):#
         print("todo")
         #pysam
         
-    def get_properly_paired_reads_of_gene(self):
+    def get_properly_paired_reads_of_gene(self):#
         print("todo")
         #pysam
 
-    def get_gene_reads_with_indels(self):
+    def get_gene_reads_with_indels(self):#
         print("todo")
         
-    def calculate_total_average_coverage(self):
+    def calculate_total_average_coverage(self):#
         print("todo")
         #pybedtools
         
-    def calculate_gene_average_coverage(self):
+    def calculate_gene_average_coverage(self):#
         print("todo")
         
-    def get_number_mapped_reads(self):
+    def get_number_mapped_reads(self):#
         print("todo")
 
     def get_region_of_gene(self):
-        print("todo")
+        global UCSClist
+        print("Exonstarts: ", UCSClist[7])
+        print("Exonends: ", UCSClist[8])
+
         
     def get_number_of_exons(self):
-        print("ads")
+        global UCSClist
+        print("Number of Exons: ", UCSClist[6])
     
     
     def print_summary(self):
         print("Print all results here")
+        assignment1 = Assignment1()
+        UCSClist = []
+        assignment1.download_gene_coordinates('hg38', 'Infofile')
+        assignment1.get_coordinates_of_gene()
+        assignment1.get_gene_symbol()
+        assignment1.get_number_of_exons()
+        assignment1.get_region_of_gene()
     
     
 def main():
     print("Assignment 1")
-    UCSClist=[]
     assignment1 = Assignment1()
-    assignment1.download_gene_coordinates('hg38', 'Infofile')
     assignment1.print_summary()
-    assignment1.get_coordinates_of_gene()
-    assignment1.get_gene_symbol()
-    
-    
     print("Done with assignment 1")
     
         
