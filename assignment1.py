@@ -1,6 +1,6 @@
 import mysql.connector
 
-__author__ = 'XXX'
+__author__ = 'Ricarda_Erhart'
 
 ##
 ## Concept:
@@ -12,7 +12,7 @@ class Assignment1:
     
     def __init__(self):
         ## Your gene of interest
-        self.gene = ""
+        self.gene = "PSMG1"
 
     
     def download_gene_coordinates(self, genome_reference, file_name):
@@ -47,33 +47,44 @@ class Assignment1:
         ## TODO this may need some work 
         with open(file_name, "w") as fh:
             for row in cursor:
-                fh.write(str(row) + "\n")
-    
+                if row[0] == self.gene:
+                    fh.write(str(row) + "\n")
             
         ## Close cursor & connection
         cursor.close()
         cnx.close()
-        
+
+        file = open(file_name, "r")
+        UCSCstring = file.readline()
+        UCSCstring = UCSCstring[2:-2]
+        string = UCSCstring.replace('\'', '')
+        global UCSClist
+        UCSClist = string.split(', ')
         print("Done fetching data")
         
     def get_coordinates_of_gene(self):
-        ## Use UCSC file
-        print("todo")
+        global UCSClist
+        print("Start: ", UCSClist[3])
+        print("Stop: ", UCSClist[4])
         
     def get_gene_symbol(self):
-        print("todo")
+        global UCSClist
+        print("Genesymbol: ", UCSClist[0])
                         
     def get_sam_header(self):
         print("todo")
+        #pysam
         
     def get_properly_paired_reads_of_gene(self):
         print("todo")
-        
+        #pysam
+
     def get_gene_reads_with_indels(self):
         print("todo")
         
     def calculate_total_average_coverage(self):
         print("todo")
+        #pybedtools
         
     def calculate_gene_average_coverage(self):
         print("todo")
@@ -94,8 +105,12 @@ class Assignment1:
     
 def main():
     print("Assignment 1")
+    UCSClist=[]
     assignment1 = Assignment1()
+    assignment1.download_gene_coordinates('hg38', 'Infofile')
     assignment1.print_summary()
+    assignment1.get_coordinates_of_gene()
+    assignment1.get_gene_symbol()
     
     
     print("Done with assignment 1")
