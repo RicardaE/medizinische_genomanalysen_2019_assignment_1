@@ -72,29 +72,49 @@ class Assignment1:
         global UCSClist
         print("Genesymbol: ", UCSClist[0])
 
-    def get_sam_header(self):
+    def get_sam_header(self):#
         samfile = pysam.AlignmentFile("chr21.bam", "rb")
         print('Header: ', samfile.header)
         samfile.close()
 
-    def get_properly_paired_reads_of_gene(self):##
+    def get_properly_paired_reads_of_gene(self):
         global UCSClist
         Start=int(UCSClist[3])
         End=int(UCSClist[4])
         samfile = pysam.AlignmentFile("chr21.bam", "rb")
         count = 0
-        a=samfile.AlignmentSegment()
-        if a.is_proper_paired() == true:
-             count = count + 1
+        for read in samfile.fetch("chr21", Start, End):
+            if read.is_proper_pair == True:
+                count=count+1
         print('Properly Paired Reads: ', count)
         samfile.close()
 
-    def get_gene_reads_with_indels(self):#
-        print("todo")
+    def get_gene_reads_with_indels(self):
+        global UCSClist
+        Start=int(UCSClist[3])
+        End=int(UCSClist[4])
+        samfile = pysam.AlignmentFile("chr21.bam", "rb")
 
-    def calculate_total_average_coverage(self):#
-        print("todo")
-        #pybedtools
+        reads = []
+        count = 0
+        for pileupcolumn in samfile.pileup("chr21", Start, End):
+            for pileupread in pileupcolumn.pileups:
+                if pileupread.indel != 0 and pileupread not in reads:
+                    reads.append(pileupread)
+                    count=count+1
+        print('Reads with indels: ', count)
+        samfile.close()
+
+    def calculate_total_average_coverage(self):
+        samfile = pysam.AlignmentFile("chr21.bam", "rb")
+        coveragesum=0
+        length=0
+        for pileupcolumn in samfile.pileup():
+            coveragesum=coveragesum+pileupcolumn.n
+            length=length+1
+        average = coveragesum / length
+        print('Total Coverage: ', average)
+        samfile.close()
 
     def calculate_gene_average_coverage(self):
         global UCSClist
@@ -142,6 +162,8 @@ class Assignment1:
         assignment1.get_number_mapped_reads()
         assignment1.calculate_gene_average_coverage()
         assignment1.get_properly_paired_reads_of_gene()
+        assignment1.get_gene_reads_with_indels()
+        assignment1.calculate_total_average_coverage()
 
 def main():
     print("Assignment 1")
