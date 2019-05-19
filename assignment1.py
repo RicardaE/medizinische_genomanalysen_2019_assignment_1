@@ -105,6 +105,7 @@ class Assignment1:
         samfile.close()
 
     def calculate_total_average_coverage(self):
+        print('PLease wait for calculation of total coverage...')
         samfile = pysam.AlignmentFile("chr21.bam", "rb")
         coveragesum=0
         length=0
